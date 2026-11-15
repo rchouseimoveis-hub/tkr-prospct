@@ -1,1 +1,13 @@
-{ "name": "tkr-pro", "private": true, "type": "module", "scripts": { "dev": "node dev-server.mjs" } }
+{
+  "name": "tkr-pro",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "TKR PRO – Dashboard de Prospecção (multiusuário, multi-aparelho)",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "dev": "node dev-server.mjs",
+    "check": "node scripts/check.mjs",
+    "standalone": "node scripts/build-standalone.mjs"
+  }
+}

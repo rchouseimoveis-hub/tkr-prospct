@@ -2,7 +2,6 @@
 // GET ?name=&alt=&city=&nets=ig,fb,li,tk,x → {ig:{url,score,title},...} só com as redes encontradas. Resultado em cache por 30 dias.
 import { store } from "./_store.js";
 import { cors, anyAuth, jp, safe } from "./_lib.js";
-export const config = { maxDuration: 30 };
 
 const API = process.env.BRAVE_API_URL || "https://api.search.brave.com/res/v1/web/search";
 const norm = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();

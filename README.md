@@ -1,35 +1,57 @@
-# TKR PRO – Dashboard de Prospecção (multiusuário, multi-aparelho)
+# TKR PRO – Dashboard de Prospecção
+
+Painel de prospecção multiusuário e multi-aparelho (celular, notebook, desktop, tablet): todos abrem o mesmo endereço e veem os mesmos leads.
+Produção: **https://tkr-pro.vercel.app**
 
 ```
 tkr-pro/
-├─ index.html          painel (um arquivo, responsivo; modo local ou servidor)
-├─ dev-server.mjs      teste local: node dev-server.mjs  → http://localhost:3000 (banco em memória)
-├─ package.json  .env.example
-└─ api/
-   ├─ _lib.js _store.js         sessão, links pessoais, escopo por nível · banco (Upstash Redis)
-   ├─ login.js session.js link.js users.js   acesso por e-mail+senha ou link pessoal; renovação a cada 15 min
-   ├─ data.js                   leads e visitas compartilhados (os aparelhos conferem a cada 10 s)
-   ├─ proxy-maps.js cnpj.js social.js        Google Places · Casa dos Dados · redes sociais (Brave Search)
-   └─ health.js                 diagnóstico (Master): banco e variáveis configuradas
+├─ index.html              painel (um arquivo, responsivo)
+├─ api/                    funções do servidor (Vercel)
+│  ├─ login session link users   acesso por e-mail+senha ou link pessoal; validação a cada 15 min
+│  ├─ data seed                  leads/visitas compartilhados (sync a cada 10 s) · base original (só Master/Gerente)
+│  ├─ proxy-maps cnpj social     Google Places · Casa dos Dados · redes sociais (Brave Search)
+│  ├─ health                     diagnóstico (Master)
+│  └─ _lib _store _base          utilitários · banco (Upstash Redis) · base original de empresas
+├─ vercel.json             cabeçalhos de segurança e limites das funções
+├─ scripts/                check.mjs (verificação) · build-standalone.mjs (versão para 1 aparelho)
+├─ dev-server.mjs          teste local: npm run dev  → http://localhost:3000 (banco em memória)
+└─ .github/workflows/      verificação automática a cada push
 ```
 
-## Colocar no ar (Vercel)
-1. Suba a pasta no Vercel (Import Project). Em **Storage**, crie um **Upstash Redis** e conecte ao projeto.
-2. Em **Settings > Environment Variables**, cadastre as variáveis do `.env.example`
-   (obrigatórias: `SESSION_SECRET`, `MASTER_EMAIL`, `MASTER_PASSWORD`; recomendadas: `GOOGLE_MAPS_KEY`, `CASADOSDADOS_KEY`; opcional: `BRAVE_SEARCH_KEY`).
-3. Faça o deploy, abra o endereço e entre com o e-mail/senha do Master (a conta é criada no 1º login). Troque a senha em 🔑.
-4. Aba **Acesso**: crie Gerentes e Consultores (consultor precisa de gerente responsável), use **🔗 Link** para o link pessoal de cada um
-   e **🩺 Diagnóstico do servidor** para conferir se está tudo configurado.
-5. Leve os leads: **Enviar base local deste navegador ao servidor** (Acesso) ou **Adicionar base original** (aba Leads).
+## 1) GitHub
+Crie um repositório **PRIVADO** (a base de empresas e a lógica de acesso não devem ficar públicas) e envie estes arquivos:
 
-Todos os aparelhos abrem o MESMO endereço e veem os mesmos leads. Alterações de uma pessoa chegam às outras em até ~10 s.
-Em conflito (duas pessoas editando o mesmo lead ao mesmo tempo) vale a última gravação.
+```bash
+git init
+git add .
+git commit -m "TKR PRO"
+git branch -M main
+git remote add origin https://github.com/SEU_USUARIO/tkr-pro.git
+git push -u origin main
+```
+Sem terminal: no GitHub, **Add file > Upload files** e arraste o conteúdo da pasta (não envie arquivos `.env`).
+
+## 2) Vercel (https://tkr-pro.vercel.app)
+1. vercel.com > **Add New > Project** > importe o repositório. Nome do projeto: `tkr-pro` (gera o endereço acima, se estiver livre).
+   Framework Preset: **Other** · Build Command: vazio · Output Directory: vazio · Root: `./`.
+2. Antes do primeiro deploy (ou depois, com **Redeploy**), aba **Storage > Create Database > Upstash Redis** e conecte ao projeto (as variáveis do banco entram sozinhas).
+3. **Settings > Environment Variables:** cadastre as variáveis do `.env.example` (obrigatórias: `SESSION_SECRET`, `MASTER_EMAIL`, `MASTER_PASSWORD`).
+4. **Deploy.** Toda alteração enviada ao GitHub (`git push`) publica automaticamente.
+
+## 3) Primeiro uso
+1. Abra https://tkr-pro.vercel.app e entre com `MASTER_EMAIL` / `MASTER_PASSWORD` (a conta Master é criada nesse primeiro login). **Depois apague `MASTER_PASSWORD`** no Vercel e troque a senha em 🔑.
+2. Aba **Acesso**: **🩺 Diagnóstico do servidor** mostra se banco e chaves estão certos. Crie Gerentes e Consultores (consultor precisa de um gerente responsável) e copie o **🔗 Link** pessoal de cada um (♻ gera outro e revoga o anterior).
+3. Aba **Leads (CRM)** > **Adicionar base original** carrega as empresas já cadastradas (vêm do servidor). Para trazer leads guardados em um navegador antigo: Acesso > **Enviar base local deste navegador ao servidor**.
 
 ## Níveis
-- **Master**: tudo, inclusive Acesso. · **Gerente**: tudo menos Acesso e "Restaurar base original"; vê os leads da sua equipe e os sem dono
-  (`GERENTE_VE_TUDO=1` para ver todos). · **Consultor VIP**: sem exportar, excluir, importar, Nova prospecção e Histórico; vê só os seus leads e os sem dono.
-As regras são aplicadas no servidor, não só na tela.
+- **Master:** tudo, inclusive Acesso.
+- **Gerente:** tudo, menos Acesso e "Restaurar base original". Vê os leads da sua equipe e os sem consultor (`GERENTE_VE_TUDO=1` para ver todos).
+- **Consultor VIP:** sem exportar, excluir, importar, Nova prospecção e Histórico. Vê só os seus leads e os sem consultor; o campo consultor da visita vem travado.
+As regras valem no servidor, não só na tela.
 
-## Segurança
-`SESSION_SECRET` assina sessões e links pessoais: não divulgue. Revogar um link (♻) ou desativar o usuário derruba as sessões abertas na próxima validação (até 15 min).
-A API da Casa dos Dados e a da Brave são pagas (por consulta); o rastreio de redes é feito só para empresas (PJ).
+## Observações
+- Conflito de edição (duas pessoas no mesmo lead no mesmo instante): vale a última gravação. A sincronização é por consulta a cada 10 s, não instantânea.
+- Casa dos Dados e Brave Search são pagas por consulta; o rastreio de redes é feito só para empresas (PJ).
+- `SESSION_SECRET` assina sessões e links pessoais: não divulgue; trocá-lo derruba todas as sessões e invalida todos os links.
+- Versão para um único aparelho, sem servidor: `npm run standalone` gera `dist/TKR_PRO_standalone.html` com a base embutida (dados só naquele navegador).
+- Desenvolvimento: `npm run dev` · Verificação: `npm run check`.
