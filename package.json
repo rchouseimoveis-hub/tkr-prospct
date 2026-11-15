@@ -1,13 +1,11 @@
 {
   "name": "tkr-pro",
-  "version": "1.0.0",
-  "private": true,
+  "version": "2.0.0",
   "type": "module",
-  "description": "TKR PRO – Dashboard de Prospecção (multiusuário, multi-aparelho)",
-  "engines": { "node": ">=18" },
   "scripts": {
-    "dev": "node dev-server.mjs",
-    "check": "node scripts/check.mjs",
-    "standalone": "node scripts/build-standalone.mjs"
+    "build": "node scripts/build.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
   }
 }
