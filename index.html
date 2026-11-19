@@ -109,7 +109,7 @@ body.srv #rs,body.r3 #asgb,body.r3 #mbase{display:none!important}#pwb{display:no
   </div>
 </section>
 
-<!-- ABA 2: NOVA PROSPECÇÃO (COM FASE 2 & FASE 3 INTEGRADOS) -->
+<!-- ABA 2: NOVA PROSPECÇÃO -->
 <section id="t2" class="hide">
   <div class="c" style="border-left: 4px solid var(--ac);">
     <b style="font-size:15px;display:block;margin-bottom:4px">Prospecção Ativa por CEP (Receita Federal + Enriquecimento)</b>
@@ -173,7 +173,7 @@ body.srv #rs,body.r3 #asgb,body.r3 #mbase{display:none!important}#pwb{display:no
   </div>
 </section>
 
-<!-- ABA 3: CAMPANHAS (COM DISPARADOR ATIVO FASE 3) -->
+<!-- ABA 3: CAMPANHAS -->
 <section id="t3" class="hide">
   <div class="c" style="border-left: 4px solid var(--bl); margin-bottom: 12px;">
     <b style="font-size:15px;display:block;margin-bottom:4px">Disparo Ativo em Massa (WhatsApp API & E-mail B2B)</b>
@@ -240,9 +240,13 @@ body.srv #rs,body.r3 #asgb,body.r3 #mbase{display:none!important}#pwb{display:no
   <div class="c"><b>Histórico de prospecções</b><div class="sc"><table><thead><tr><th>Data</th><th>Segmentos</th><th>Endereço / raio</th><th>Encontradas</th><th>Validade</th><th>Lista</th><th>Ações</th></tr></thead><tbody id="hb"></tbody></table></div></div>
 </section>
 
-<!-- ABA 6: ACESSO -->
+<!-- ABA 6: ACESSO E SENHAS (ORGANIZADO PARA EQUIPE) -->
 <section id="t6" class="hide">
-  <div class="c"><b style="font-size:15px">Acesso e senhas</b><div id="acc"></div></div>
+  <div class="c">
+    <b style="font-size:15px">Acesso e senhas da equipe</b>
+    <p class="mu">Somente o Master vê esta aba. Informe o e-mail de cada usuário (é o login), edite os nomes, defina ou gere senhas (mínimo 12 caracteres) e ative cada usuário. A senha nunca é exibida depois de salva. Gerentes: tudo, exceto esta aba. Consultores VIP: sem exportar, excluir, importar, nova prospecção e histórico; veem apenas os leads atribuídos a eles (ou sem consultor).</p>
+    <div id="acc"></div>
+  </div>
 </section>
 
 <dialog id="dg"></dialog>
@@ -252,7 +256,7 @@ body.srv #rs,body.r3 #asgb,body.r3 #mbase{display:none!important}#pwb{display:no
 <div id="lg0"><div id="lgb" class="c"><b>TKR PRO</b><p class="mu">Carregando...</p></div></div>
 
 <script>
-var D=[{"e":"TKR Andrade Consultoria Especializada","s":"Consultoria","b":"Vila Moraes","r":"Bairro pedido","d":0,"a":"Av. do Cursino, 5317 - 64-B","c":"04169-000","t":"(11) 98333-8464","st":"Novo"}];
+var D=[];
 var PR=["Plano de saúde","Seguro","Consórcio","Consultoria Patrimonial","Benefícios corporativos"],PF=["Família","Empresário","Investidor","Empresa (benefícios)"],ST=["Novo","Contatado","Reunião","Proposta","Fechado","Descartado"],SI=["Ativo","Inativo","Fechado"],PO=["MEI","ME","EPP","Médio/Grande"];
 var C=[["#","Nº"],["_ac","Ações"],["_sc","Score"],["e","Empresa / Nome"],["s","Segmento"],["b","Bairro"],["a","Endereço"],["c","CEP"],["t","Telefone"],["_wa","WhatsApp"],["em","E-mail","in"],["cn","CPF/CNPJ","cn"],["sit","Situação","sel",SI],["po","Porte","sel",PO],["pr","Produto","sel",PR],["vg","VGV (R$)","in"],["st","Status","sel",ST],["nd","Próx. contato","dt"],["cs","Consultor","cons"],["o","Obs.","in"]];
 var L=null;try{L=JSON.parse(localStorage.getItem("tkr3"))}catch(e){}
@@ -264,8 +268,8 @@ function save(){if(SRV){qsync();return}try{localStorage.setItem("tkr3",JSON.stri
 function $(i){return document.getElementById(i)}
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function toast(m){var t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.style.opacity="0";setTimeout(function(){t.remove()},300)},3200)}
-function okC(c){c=(c||"").replace(/\D/g,"");if(c.length!=14||/^(\d)\1+$/.test(c))return false;function f(n){var s=0,p=n-7;for(var i=0;i<n;i++){s+=c[i]*p--;if(p<2)p=9}var r=s%11;return r<2?0:11-r}return f(12)==c[12]&&f(13)==c[13]}
-function okCPF(c){c=(c||"").replace(/\D/g,"");if(c.length!=11||/^(\d)\1+$/.test(c))return false;function f(n){var s=0;for(var i=0;i<n;i++)s+=c[i]*(n+1-i);var r=s*10%11;return r==10?0:r}return f(9)==c[9]&&f(10)==c[10]}
+function okC(c){c=(c||"").replace(/\D/g,"");if(c.length!=14||/^(\d)+$/.test(c))return false;function f(n){var s=0,p=n-7;for(var i=0;i<n;i++){s+=c[i]*p--;if(p<2)p=9}var r=s%11;return r<2?0:11-r}return f(12)==c[12]&&f(13)==c[13]}
+function okCPF(c){c=(c||"").replace(/\D/g,"");if(c.length!=11||/^(\d)+$/.test(c))return false;function f(n){var s=0;for(var i=0;i<n;i++)s+=c[i]*(n+1-i);var r=s*10%11;return r==10?0:r}return f(9)==c[9]&&f(10)==c[10]}
 function okDoc(c){return okC(c)||okCPF(c)}
 function fmtDoc(c){var d=String(c||"").replace(/\D/g,"");return d.length==11?d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,"$1.$2.$3-$4"):d.length==14?d.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,"$1.$2.$3/$4-$5"):String(c||"")}
 function fmtPh(t){var d=String(t||"").replace(/\D/g,"");if(d.length>11&&d.slice(0,2)=="55")d=d.slice(2);return d.length==11?d.replace(/(\d{2})(\d{5})(\d{4})/,"($1) $2-$3"):d.length==10?d.replace(/(\d{2})(\d{4})(\d{4})/,"($1) $2-$3"):String(t||"")}
@@ -274,13 +278,16 @@ function enrich(o){if(o.cn){o.cn=fmtDoc(o.cn);var d=o.cn.replace(/\D/g,"");o.tp=
 function wa(l){var p=ph(l.t);return p.length==11&&p[2]=="9"?"https://wa.me/55"+p+"?text="+encodeURIComponent("Olá! Aqui é da TKR Andrade Consultoria."):""}
 function today(){return new Date().toISOString().slice(0,10)}
 function addDays(n){var d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}
-function n2(s){return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,"")}
+function n2(s){return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]/g,"")}
 function dkey(o){return n2(o.e)+"|"+n2(o.a)}
 function dup(o,pool){var p=ph(o.t);return pool.some(function(l){return dkey(l)==dkey(o)||(p.length>=8&&p==ph(l.t))||(o.em&&l.em&&o.em==l.em)||(ph(o.cn).length>=11&&ph(o.cn)==ph(l.cn))})}
 function addLead(o){if(dup(o,L))return false;L.push(o);return true}
+function okEm(e){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)}
+function gen(){var a="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%",r=crypto.getRandomValues(new Uint8Array(12)),p="";for(var i=0;i<12;i++)p+=a[r[i]%a.length];return p}
 
 ["Dashboard","Leads (CRM)","Nova prospecção","Campanhas","Visitas e equipe","Histórico","Acesso"].forEach(function(n,i){var b=document.createElement("button");b.textContent=n;b.onclick=function(){show(i)};$("nav").appendChild(b)});
 function show(i){
+  if(ROLE==3&&(i==2||i==5||i==6)||ROLE==2&&i==6)return;
   for(var k=0;k<7;k++){$("t"+k).classList.toggle("hide",k!==i);$("nav").children[k].classList.toggle("on",k===i)}
   if(i===0)dash();if(i===1)draw();if(i===4)vdraw();if(i===6)aDraw();
 }
@@ -290,17 +297,22 @@ function prio(l){var s=score(l);return s>=50?"Quente":s>=35?"Morno":"Frio"}
 
 function fq(){
   var t=today(),due=[],nw=[];
-  L.forEach(function(l,i){if(l.st=="Descartado"||l.st=="Fechado")return;if(l.nd&&l.nd<=t)due.push(i);else if(l.st=="Novo"&&score(l)>=35)nw.push(i)});
+  L.forEach(function(l,i){
+    if(ROLE==3&&l.cs&&l.cs!=ME.name)return;
+    if(l.st=="Descartado"||l.st=="Fechado")return;
+    if(l.nd&&l.nd<=t)due.push(i);else if(l.st=="Novo"&&score(l)>=35)nw.push(i);
+  });
   var q=due.concat(nw).slice(0,15);
   var h="<div class='c'><b>Fila de prospecção de hoje</b> <span class='mu'>"+due.length+" retorno(s) · "+nw.length+" prioritário(s)</span>";
   if(!q.length)h+="<p class='mu'>Nada na fila hoje.</p>";
   else h+="<div class='sc' style='margin-top:8px'><table><thead><tr><th>Lead</th><th>Score</th><th>Tipo</th><th>Telefone</th><th>Ação</th></tr></thead><tbody>"+q.map(function(i){var l=L[i],w=wa(l);return"<tr><td>"+esc(l.e)+"</td><td>"+score(l)+" · "+prio(l)+"</td><td>"+(l.nd&&l.nd<=t?"Retorno":"Primeiro contato")+"</td><td>"+esc(l.t||"—")+"</td><td>"+(w?"<a class='b act' target='_blank' href='"+w+"'>WhatsApp</a> ":"")+"<button class='b act' data-q='"+i+"'>Contatado (+3 dias)</button></td></tr>"}).join("")+"</tbody></table></div>";
   $("fq").innerHTML=h+"</div>";
 }
-$("fq").onclick=function(e){var b=e.target.closest("button");if(!b||b.dataset.q==null)return;var l=L[+b.dataset.q];l.st="Contatado";l.dt=today();l.nd=addDays(3);save();dash();toast("Contatado. Retorno em 3 dias.")};
+$("fq").onclick=function(e){var b=e.target.closest("button");if(!b||b.dataset.q==null)return;var l=L[+b.dataset.q];if(ROLE>1&&!l.cs)l.cs=ME.name;l.st="Contatado";l.dt=today();l.nd=addDays(3);save();dash();toast("Contatado. Retorno em 3 dias.")};
 
 function dash(){
-  var n=L.length,pc=function(f){return L.filter(f).length};
+  var myL=L.filter(function(l){return ROLE!=3||!l.cs||l.cs==ME.name});
+  var n=myL.length,pc=function(f){return myL.filter(f).length};
   var K=[["Leads",n],["Leads quentes",pc(function(l){return prio(l)=="Quente"})],["Ativos",pc(function(l){return l.sit=="Ativo"})],["CPF/CNPJ válido",pc(function(l){return okDoc(l.cn)})],["Com WhatsApp",pc(function(l){return wa(l)})],["Contatados",pc(function(l){return l.st!="Novo"})],["Fechados",pc(function(l){return l.st=="Fechado"})]];
   $("kp").innerHTML=K.map(function(k){return"<div><b>"+k[1]+"</b><small>"+k[0]+"</small></div>"}).join("");
   fq();
@@ -309,7 +321,10 @@ function dash(){
 var pg=0,PS=40,V=[],SELECTED=new Set();
 function draw(){
   var q=($("q").value||"").toLowerCase();
-  V=[];L.forEach(function(l,i){if(!q||((l.e||"")+" "+(l.a||"")+" "+(l.s||"")).toLowerCase().indexOf(q)>=0)V.push(i)});
+  V=[];L.forEach(function(l,i){
+    if(ROLE==3&&l.cs&&l.cs!=ME.name)return;
+    if(!q||((l.e||"")+" "+(l.a||"")+" "+(l.s||"")).toLowerCase().indexOf(q)>=0)V.push(i);
+  });
   $("th").innerHTML="<tr><th class='pick'><input type='checkbox' id='selPage'></th>"+C.map(function(c){return"<th>"+c[1]+"</th>"}).join("")+"</tr>";
   $("tb").innerHTML=V.slice(pg*PS,pg*PS+PS).map(function(i){
     var l=L[i];
@@ -343,8 +358,134 @@ $("im").onclick=function(){
   $("ps").value="";save();toast(add+" leads adicionados!");
 };
 
-/* ===== MODO SERVIDOR (FASE 1) ===== */
+/* ===== GESTÃO DE ACESSO E EQUIPE (MODO LOCAL E NUVEM) ===== */
 var SRV=false,TOKEN="",USERS=[],SNAP={},SNAPV={},SYNCQ=null,VER=0,ROLE=1,ME={name:"Master"};
+var NIV=["","Master","Gerente","Consultor VIP"];
+var ACC=null;try{ACC=JSON.parse(localStorage.getItem("tkr3u"))}catch(e){}
+if(!ACC){
+  ACC={master:{n:"Master",e:"",s:"",h:""},us:[]};
+  for(var i=0;i<10;i++)ACC.us.push({r:i<5?2:3,n:(i<5?"Gerente ":"Consultor VIP ")+(i%5+1),e:"",s:"",h:"",a:false});
+}
+function asv(){try{localStorage.setItem("tkr3u",JSON.stringify(ACC))}catch(e){}}
+function unames(){
+  if(SRV)return USERS.filter(function(u){return u.active!==false}).map(function(u){return u.name});
+  return [ACC.master.n].concat(ACC.us.filter(function(u){return u.a&&u.n}).map(function(u){return u.n}));
+}
+
+$("asgb").onclick=function(){
+  var ch=Array.from(SELECTED).filter(function(l){return L.indexOf(l)>=0});
+  if(!ch.length){toast("Marque as empresas na primeira coluna.");return}
+  var ns=unames();
+  var nm=prompt("Atribuir "+ch.length+" lead(s) para quem?\nDisponíveis: "+ns.join(", "));
+  if(!nm)return;
+  var f=ns.filter(function(x){return x.toLowerCase()==nm.trim().toLowerCase()})[0];
+  if(!f){alert("Nome não encontrado na equipe.");return}
+  ch.forEach(function(l){l.cs=f});
+  SELECTED.clear();save();draw();toast("Atribuído a "+f+".");
+};
+
+function aDraw(){
+  if(ROLE!=1)return;
+  if(SRV)return aDrawS();
+
+  function rowLocal(id,lv,o){
+    return "<tr>"+
+      "<td><b>"+lv+"</b></td>"+
+      "<td><input data-a='n' data-id='"+id+"' value='"+esc(o.n)+"'></td>"+
+      "<td><input data-a='e' data-id='"+id+"' type='email' value='"+esc(o.e||"")+"' placeholder='nome@email.com'></td>"+
+      "<td><div class='row' style='flex-wrap:nowrap'><input data-a='p' data-id='"+id+"' type='password' placeholder='"+(o.h?"•••••••• (manter)":"definir senha")+"'><button class='b act' data-a='g' data-id='"+id+"' type='button'>🎲 Gerar</button></div></td>"+
+      "<td style='text-align:center'>"+(id=="m"?"—":"<input type='checkbox' data-a='t' data-id='"+id+"' style='width:16px;height:16px' "+(o.a?"checked":"")+">")+"</td>"+
+      "<td><button class='b p act' data-a='s' data-id='"+id+"' type='button'>Salvar</button></td>"+
+    "</tr>";
+  }
+
+  var h="<div class='sc'><table><thead><tr><th>Nível</th><th>Nome (editável)</th><th>E-mail (login)</th><th>Nova senha</th><th>Ativo</th><th></th></tr></thead><tbody>"+
+    rowLocal("m","1 · Master",ACC.master);
+  ACC.us.forEach(function(u,i){h+=rowLocal("u"+i,u.r==2?"2 · Gerente":"3 · Consultor VIP",u)});
+  h+="</tbody></table></div>"+
+     "<div class='row' style='margin-top:12px'><button class='b' id='btnMigrarLocal' type='button'>☁️ Enviar base local e equipe ao servidor</button></div>";
+  $("acc").innerHTML=h;
+}
+
+function aDrawS(){
+  var gs=USERS.filter(function(u){return u.role<=2&&u.active!==false});
+  function rowSrv(id,u){
+    var m=u.role==1;
+    return "<tr>"+
+      "<td><input data-a='n' data-id='"+id+"' value='"+esc(u.name||"")+"' placeholder='Nome'></td>"+
+      "<td><input data-a='e' data-id='"+id+"' type='email' value='"+esc(u.email||"")+"' placeholder='nome@email.com'></td>"+
+      "<td>"+(m?"<b>1 · Master</b>":"<select data-a='r' data-id='"+id+"'><option value='2'"+(u.role==2?" selected":"")+">2 · Gerente</option><option value='3'"+(u.role!=2?" selected":"")+">3 · Consultor VIP</option></select>")+"</td>"+
+      "<td>"+(m?"—":"<select data-a='m' data-id='"+id+"'><option value=''>—</option>"+gs.map(function(g){return"<option value='"+g.id+"'"+(u.mid==g.id?" selected":"")+">"+esc(g.name)+"</option>"}).join("")+"</select>")+"</td>"+
+      "<td><div class='row' style='flex-wrap:nowrap'><input data-a='p' data-id='"+id+"' type='password' placeholder='"+(u.id?"•••••••• (manter)":"definir senha")+"'><button class='b act' data-a='g' data-id='"+id+"' type='button'>🎲 Gerar</button></div></td>"+
+      "<td style='text-align:center'>"+(m?"—":"<input type='checkbox' data-a='t' data-id='"+id+"' style='width:16px;height:16px' "+(u.active!==false?"checked":"")+">")+"</td>"+
+      "<td><button class='b p act' data-a='s' data-id='"+id+"' type='button'>Salvar</button>"+(id=="new"?"":" <button class='b act' data-a='lk' data-id='"+id+"' type='button' title='Copiar link pessoal'>🔗 Link</button>")+"</td>"+
+    "</tr>";
+  }
+  var h="<div class='sc'><table><thead><tr><th>Nome</th><th>E-mail (login)</th><th>Nível</th><th>Gerente responsável</th><th>Nova senha</th><th>Ativo</th><th></th></tr></thead><tbody>";
+  USERS.forEach(function(u){h+=rowSrv(u.id,u)});
+  h+=rowSrv("new",{role:3,active:true})+"</tbody></table></div>"+
+     "<p class='mu'>Última linha = adicionar novo usuário na nuvem.</p>"+
+     "<div class='row' style='margin-top:8px'><button class='b' id='btnMigrarLocal' type='button'>☁️ Enviar base local deste navegador ao servidor</button> <button class='b' data-a='diag' type='button'>🩺 Diagnóstico do servidor</button></div>";
+  $("acc").innerHTML=h;
+}
+
+$("acc").onclick=async function(e){
+  var b=e.target.closest("button");if(!b||ROLE!=1)return;
+  if(b.id=="btnMigrarLocal"){
+    var lc=JSON.parse(localStorage.getItem("tkr3")||"[]");
+    lc.forEach(function(l){if(!dup(l,L))L.push(l)});
+    qsync();toast("Sincronizando "+lc.length+" leads locais com o servidor...");return;
+  }
+  var id=b.dataset.id,a=b.dataset.a;
+  var q=function(k){return $("acc").querySelector("[data-a='"+k+"'][data-id='"+id+"']")};
+
+  if(a=="g"){var p=q("p");p.type="text";p.value=gen();return}
+
+  if(!SRV){
+    var o=id=="m"?ACC.master:ACC.us[+id.slice(1)];
+    if(a!="s")return;
+    var nm=q("n").value.trim(),em=q("e").value.trim().toLowerCase(),pw=q("p").value,on=id=="m"?true:q("t").checked;
+    if(!nm){alert("Informe o nome.");return}
+    if(em&&!okEm(em)){alert("E-mail inválido.");return}
+    if(pw&&pw.length<8){alert("A senha precisa ter no mínimo 12 caracteres.");return}
+    o.n=nm;o.e=em;if(pw)o.h=pw;if(id!="m")o.a=on;
+    asv();aDraw();toast("Usuário salvo localmente: "+nm);return;
+  }
+
+  if(a=="diag"){
+    try{
+      var h=await api("api/health");
+      alert("Banco: "+(h.banco.ok?"OK":"Erro")+"\nLeads na nuvem: "+h.leads+"\nUsuários: "+h.usuarios);
+    }catch(err){alert(err.message)}
+    return;
+  }
+  if(a=="lk"){
+    try{
+      var dd=await api("api/link",{method:"POST",body:JSON.stringify({id:id})});
+      try{await navigator.clipboard.writeText(dd.url)}catch(x){}
+      prompt("Link pessoal de acesso rápido (já copiado):",dd.url);
+    }catch(err){alert(err.message)}
+    return;
+  }
+  if(a=="s"){
+    var t=q("t"),r=q("r"),m=q("m");
+    var body={
+      id:id=="new"?undefined:id,
+      name:q("n").value.trim(),
+      email:q("e").value.trim(),
+      role:r?+r.value:1,
+      mid:m?m.value:"",
+      active:t?t.checked:true,
+      password:q("p").value
+    };
+    if(!body.name||!body.email){alert("Informe nome e e-mail.");return}
+    try{
+      var d=await api("api/users",{method:"POST",body:JSON.stringify(body)});
+      USERS=d.users;toast("Salvo na nuvem: "+body.name);aDrawS();
+    }catch(err){alert(err.message)}
+  }
+};
+
 function UID(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
 function api(path,opt){
   opt=opt||{};
@@ -369,30 +510,35 @@ async function pull(force){
   dash();draw();
 }
 async function enterS(u){
-  SRV=true;ME=u;ROLE=u.role;document.body.classList.add("in","srv");
-  $("who").textContent=u.name;
+  SRV=true;ME=u;ROLE=u.role;
+  document.body.classList.remove("r1","r2","r3");
+  document.body.classList.add("in","srv","r"+ROLE);
+  $("who").textContent="👤 "+u.name+" · "+NIV[ROLE];
+  for(var k=0;k<7;k++){
+    var bt=$("nav").children[k];
+    if(bt)bt.style.display=(k==6&&ROLE!=1)||(ROLE==3&&(k==2||k==5))?"none":"";
+  }
   await pull(true);show(0);
 }
-function lgInitS(){
-  $("lgb").innerHTML="<h1>TKR <span>PRO</span></h1><label>E-mail</label><input id='lem' type='email' value='admin@tkr.com.br'><label style='margin-top:6px'>Senha</label><input id='lpw' type='password' placeholder='TKR@2026master'><button class='b p' id='lbtn' style='margin-top:10px;width:100%'>Entrar</button><div class='no' id='lmsg' style='margin-top:6px'></div>";
+function lgInitS(setupRequired){
+  var setup=!!setupRequired;
+  $("lgb").innerHTML="<h1>TKR <span>PRO</span></h1>"+
+    (setup?"<p class='mu'>Primeiro acesso: crie a conta Master. A chave de implantação deve ser configurada na Vercel como TKR_BOOTSTRAP_KEY.</p><label>Chave de implantação</label><input id='bkey' type='password' autocomplete='off'><label>Nome do Master</label><input id='bname' value='Administrador TKR'><label>E-mail</label><input id='bem' type='email'><label>Senha (mínimo 12 caracteres)</label><input id='bpw' type='password' autocomplete='new-password'><button class='b p' id='lbtn' style='margin-top:10px;width:100%'>Criar Master</button>":"<label>E-mail</label><input id='lem' type='email' autocomplete='username'><label style='margin-top:6px'>Senha</label><input id='lpw' type='password' autocomplete='current-password'><button class='b p' id='lbtn' style='margin-top:10px;width:100%'>Entrar</button>")+"<div class='no' id='lmsg' style='margin-top:6px'></div>";
   $("lbtn").onclick=async function(){
     try{
-      var r=await api("api/login",{method:"POST",body:JSON.stringify({email:$("lem").value,password:$("lpw").value})});
-      TOKEN=r.token;localStorage.setItem("tkr3tk",TOKEN);enterS(r.user);
+      var r;
+      if(setup){
+        r=await api("api/bootstrap",{method:"POST",body:JSON.stringify({key:$("bkey").value,name:$("bname").value,email:$("bem").value,password:$("bpw").value})});
+      }else{
+        r=await api("api/login",{method:"POST",body:JSON.stringify({email:$("lem").value,password:$("lpw").value})});
+      }
+      TOKEN=r.token;localStorage.setItem("tkr3tk",TOKEN);await enterS(r.user);
     }catch(e){$("lmsg").textContent=e.message}
-  };
-}
-function aDraw(){
-  $("acc").innerHTML="<button class='b p' id='btnMigrarLocal'>Enviar base local deste navegador ao servidor</button>";
-  $("btnMigrarLocal").onclick=function(){
-    var lc=JSON.parse(localStorage.getItem("tkr3")||"[]");
-    lc.forEach(function(l){if(!dup(l,L))L.push(l)});
-    qsync();toast("Sincronizando "+lc.length+" leads locais com o Supabase...");
   };
 }
 $("out").onclick=function(){localStorage.removeItem("tkr3tk");location.reload()};
 
-/* ===== FASE 2 & 3: BUSCA POR CEP + DISPARO ATIVO ===== */
+/* ===== BUSCA POR CEP + DISPARO ATIVO ===== */
 var CEP_RESULTS=[];
 $("btnBuscarCep").onclick=async function(){
   var cep=$("cepBusca").value.replace(/\D/g,"");
@@ -401,7 +547,7 @@ $("btnBuscarCep").onclick=async function(){
   try{
     var d=await api("api/buscar-cep",{method:"POST",body:JSON.stringify({cep:cep,raio:$("cepRaio").value,segmento:$("cepSeg").value,porte:$("cepPorte").value})});
     CEP_RESULTS=d.leads||[];
-    $("cepStatus").textContent=CEP_RESULTS.length+" empresa(s) encontrada(s).";
+    $("cepStatus").textContent=d.aviso||(""+CEP_RESULTS.length+" empresa(s) encontrada(s).");
     $("cepPreviewBody").innerHTML=CEP_RESULTS.map(function(l,idx){
       return"<tr><td><input type='checkbox' class='cep-chk' data-idx='"+idx+"' checked></td><td><b class='ok'>"+l.score+" · "+l.prioridade+"</b></td><td>"+esc(l.e)+"</td><td>"+esc(l.cn)+"</td><td>"+esc(l.po)+"</td><td>"+esc(l.t)+"</td><td>"+esc(l.em)+"</td></tr>";
     }).join("");
@@ -437,14 +583,35 @@ $("btnDispararCampanha").onclick=async function(){
   }catch(e){$("dispStatus").textContent="Erro: "+e.message}
 };
 
+function vdraw(){
+  $("tm").value=TEAM.join(", ");
+  $("ob").value=OB;
+  $("dIT").innerHTML=unames().map(function(o){return"<option value='"+esc(o)+"'>"}).join("");
+  $("dIE").innerHTML=L.map(function(l){return"<option value='"+esc(l.e)+"'>"}).join("");
+}
+$("tm").onchange=function(){TEAM=this.value.split(",").map(function(s){return s.trim()}).filter(Boolean);sv()};
+$("ob").onchange=function(){OB=this.value;sv()};
+
 async function boot(){
   try{
+    var k=new URLSearchParams(location.search).get("k");
+    if(k){
+      var r0=await api("api/login",{method:"POST",body:JSON.stringify({link:k})});
+      TOKEN=r0.token;localStorage.setItem("tkr3tk",TOKEN);
+      history.replaceState(null,"",location.pathname);
+      return await enterS(r0.user);
+    }
     var t=localStorage.getItem("tkr3tk")||"";
-    if(t){TOKEN=t;var r=await api("api/session");if(r.user)return enterS(r.user)}
-    var s=await fetch("api/session").then(function(x){return x.json()});
-    if(s.server)return lgInitS();
-  }catch(e){}
-  document.body.classList.add("in");$("sync").textContent=" · modo local";show(0);
+    if(t){TOKEN=t;var r=await api("api/session");if(r.user)return await enterS(r.user);localStorage.removeItem("tkr3tk");TOKEN="";}
+    var response=await fetch("/api/session");
+    if(!response.ok)throw new Error("Backend indisponível (HTTP "+response.status+"). Verifique as funções /api na Vercel.");
+    var state=await response.json();
+    if(state.setupRequired)return lgInitS(true);
+    if(state.server)return lgInitS(false);
+    throw new Error("Backend não confirmou a inicialização.");
+  }catch(e){
+    $("lgb").innerHTML="<h1>TKR <span>PRO</span></h1><p class='no'>Não foi possível conectar ao backend: "+esc(e.message)+"</p><button class='b p' onclick='location.reload()'>Tentar novamente</button><p class='mu'>O acesso local automático foi desativado por segurança. Configure as variáveis e as funções /api na Vercel.</p>";
+  }
 }
 boot();
 </script>
